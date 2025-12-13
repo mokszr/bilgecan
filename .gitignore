@@ -41,8 +41,12 @@ pnpmfile.js
 webpack.generated.js
 vite.generated.ts
 dev.bundle
+prod.bundle
 
 # Local configuration
 src/main/resources/application-local.properties
 src/main/resources/application-*.local.properties
 /config/
+
+.DS_Store
+**/.DS_Store
