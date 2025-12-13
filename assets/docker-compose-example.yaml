@@ -1,0 +1,12 @@
+services:
+  db:
+    container_name: c_postgre_bilgecan-prod
+    image: 'pgvector/pgvector:pg17-trixie'
+    environment:
+      - 'POSTGRES_DB=bilgecandb'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '5432:5432'
+    volumes:
+      - /path/to/valid/bilgecan_postgre:/var/lib/postgresql/data

@@ -1,0 +1,32 @@
+services:
+  db:
+    container_name: c_postgre_bilgecan
+    image: 'pgvector/pgvector:pg17-trixie'
+    environment:
+      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgre_bilgecan_data:/var/lib/postgresql/data
+
+  sonarqube:
+    container_name: c_sonarqube_bilgecan
+    image: sonarqube:community
+    depends_on:
+      - db
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_JDBC_URL=jdbc:postgresql://db:5432/mydatabase?currentSchema=sonarqube
+      - SONAR_JDBC_USERNAME=myuser
+      - SONAR_JDBC_PASSWORD=secret
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+#8pv!gS+J705G
+volumes:
+  postgre_bilgecan_data:
+  sonarqube_data:
+  sonarqube_extensions:

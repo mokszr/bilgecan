@@ -1,0 +1,55 @@
+/* main-layout.css */
+
+/*
+:host {
+    --lumo-base-color: #f4f5f7;
+    --lumo-primary-color: #0052cc;
+    --lumo-font-size: 16px;
+    --lumo-border-radius: 8px;
+}
+
+vaadin-app-layout[primary-section="drawer"] {
+    background: #0052cc;
+}
+
+vaadin-app-layout[primary-section="drawer"] .router-link {
+    color: #fff;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+vaadin-app-layout[primary-section="drawer"] .router-link:hover {
+    background-color: #003d99;
+}
+
+h1 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+header {
+    background-color: #fff;
+}
+
+vaadin-avatar {
+    border-radius: 50%;
+    margin-right: 0.5em;
+}
+
+*/
+
+/*  border color  */
+
+/*
+vaadin-vertical-layout,
+vaadin-horizontal-layout {
+    border: 1x solid black
+}
+*/
+
+.custom-wrap-text {
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}

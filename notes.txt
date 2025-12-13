@@ -1,0 +1,1 @@
+./mvnw clean verify sonar:sonar -Dsonar.host.url=http://localhost:9000 -Dsonar.login=squ_15e1135b4e18a9ee154a045d39c961896e239c6d

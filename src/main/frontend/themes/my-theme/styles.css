@@ -1,0 +1,8 @@
+[theme~='badge'][theme~='canceled'] {
+  color: var(--lumo-warning-text-color);
+  background-color: var(--lumo-warning-color-10pct);
+}
+
+vaadin-app-layout::part(drawer) {
+  width: 290px;
+}
