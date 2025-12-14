@@ -60,7 +60,13 @@ public class FileSystemOutputTargetParamsView extends VerticalLayout {
         archiveDirectoryComboBox.setItems(archiveDirectories);
 
         binder.forField(archiveDirectoryComboBox)
-                .withValidator(StringUtils::isNotBlank, translations.t("validation.fieldCannotBeBlank", translations.t("fileSystemOutputTargetParams.archiveDirectory")))
+                .withValidator(aPath -> {
+                    if (moveFileToArchive.getValue()) {
+                        return StringUtils.isNotBlank(aPath);
+                    } else {
+                        return true;
+                    }
+                }, translations.t("validation.fieldCannotBeBlank", translations.t("fileSystemOutputTargetParams.archiveDirectory")))
                 .bind(this::getArchiveDirectory,
                         this::setArchiveDirectory);
 
@@ -103,6 +109,8 @@ public class FileSystemOutputTargetParamsView extends VerticalLayout {
     public void readBean(OutputTargetDto outputTargetDto) {
         this.outputTargetDto = outputTargetDto;
         binder.readBean(outputTargetDto);
+
+        archiveDirectoryComboBox.setVisible(getMoveFileToArchive(outputTargetDto));
     }
 
 }

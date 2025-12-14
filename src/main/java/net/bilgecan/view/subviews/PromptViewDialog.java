@@ -1,5 +1,6 @@
 package net.bilgecan.view.subviews;
 
+import com.vaadin.flow.component.markdown.Markdown;
 import net.bilgecan.dto.PromptDto;
 import net.bilgecan.service.TranslationService;
 import com.vaadin.flow.component.button.Button;
@@ -38,7 +39,7 @@ public class PromptViewDialog extends Dialog {
         card.setWidthFull();
         card.setMaxHeight("500px");
         card.setTitle(dto.getName());
-        Paragraph p1 = new Paragraph(dto.getInput());
+        Markdown p1 = new Markdown(dto.getInput());
         p1.setMaxHeight("400px");
         p1.setWidthFull();
         p1.getStyle().set("text-overflow", "ellipsis");

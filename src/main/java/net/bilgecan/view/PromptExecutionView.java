@@ -1,5 +1,8 @@
 package net.bilgecan.view;
 
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.markdown.Markdown;
+import com.vaadin.flow.component.orderedlayout.Scroller;
 import net.bilgecan.dto.PromptDto;
 import net.bilgecan.init.OllamaModelRegistry;
 import net.bilgecan.service.PromptService;
@@ -14,7 +17,6 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.NativeLabel;
-import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.messages.MessageList;
 import com.vaadin.flow.component.messages.MessageListItem;
@@ -61,7 +63,7 @@ public class PromptExecutionView extends VerticalLayout implements HasUrlParamet
     private Span promptName;
     private TextArea promptInputField;
     private Card card;
-    private final Paragraph promptParagraph;
+    private final Markdown promptParagraph;
 
     private final MessageList messageList;
 
@@ -85,17 +87,22 @@ public class PromptExecutionView extends VerticalLayout implements HasUrlParamet
         promptInputField = new TextArea();
         promptInputField.setWidthFull();
         promptInputField.setVisible(false);
+        promptInputField.setMaxHeight("450px");
 
-        promptParagraph = new Paragraph();
+        promptParagraph = new Markdown();
         promptParagraph.setWidthFull();
+        promptParagraph.setMaxHeight("450px");
+        promptParagraph.getStyle().set("text-overflow", "ellipsis");
+        promptParagraph.getStyle().set("overflow-wrap", "break-word");
+        promptParagraph.getStyle().set("white-space", "normal");
+        promptParagraph.getStyle().set("overflow", "auto");
 
         card = new Card();
         card.setWidthFull();
+        card.setMaxHeight("500px");
         card.add(promptParagraph);
 
         add(promptName);
-        add(promptInputField);
-        add(card);
 
         HorizontalLayout optionsLayout = new HorizontalLayout();
         optionsLayout.setAlignItems(Alignment.BASELINE);
@@ -130,7 +137,7 @@ public class PromptExecutionView extends VerticalLayout implements HasUrlParamet
 
                 messageList.setItems(Arrays.asList(item));
 
-                promptParagraph.setText(promptInputField.getValue());
+                promptParagraph.setContent(promptInputField.getValue());
                 card.setVisible(true);
                 promptInputField.setVisible(false);
 
@@ -184,9 +191,6 @@ public class PromptExecutionView extends VerticalLayout implements HasUrlParamet
         toolbarLayout.add(abortButton);
         toolbarLayout.add(editButton);
 
-        add(optionsLayout);
-        add(toolbarLayout);
-
         progressBar = new ProgressBar();
         progressBar.setIndeterminate(true);
         progressBar.setVisible(false);
@@ -208,7 +212,12 @@ public class PromptExecutionView extends VerticalLayout implements HasUrlParamet
 
         messageList = new MessageList();
         messageList.setMarkdown(true);
-        add(messageList);
+        messageList.setSizeFull();
+
+        Scroller scroller = new Scroller(new Div(promptInputField, card, optionsLayout, toolbarLayout, messageList));
+        scroller.setScrollDirection(Scroller.ScrollDirection.VERTICAL);
+        scroller.setWidthFull();
+        add(scroller);
 
     }
 
@@ -279,7 +288,7 @@ public class PromptExecutionView extends VerticalLayout implements HasUrlParamet
             promptName.setTitle(currentPrompt.getName());
 
             promptInputField.setValue(currentPrompt.getInput());
-            promptParagraph.setText(currentPrompt.getInput());
+            promptParagraph.setContent(currentPrompt.getInput());
 
         } else {
             promptName.setText(translations.t("prompt.promptNotFound"));

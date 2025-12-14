@@ -470,6 +470,11 @@ public class FileProcessingPipelineView extends VerticalLayout implements HasDyn
                 fileSystemOutputTargetParamsView.writeBean();
             }
 
+            if (currentFilePipeline.getAiTaskTemplateId() == null) {
+                NotificationSupport.showError(translations.t("fileProcessingPipeline.aiTaskShouldBeSelected"));
+                return false;
+            }
+
             fileProcessingPipelineService.saveFileProcessingPipeline(currentFilePipeline);
             paginationView.loadCurrentPageAfterAddition();
             hideForm();

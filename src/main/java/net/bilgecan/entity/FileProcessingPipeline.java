@@ -27,7 +27,7 @@ public class FileProcessingPipeline {
     private InputSource inputSource;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "task_id")
+    @JoinColumn(name = "task_id", nullable = false)
     private AITaskTemplate task;
 
     @ManyToOne(fetch = FetchType.LAZY)

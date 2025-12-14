@@ -72,6 +72,10 @@ public class FileProcessingPipelineService {
             }
         }
 
+        if (pipelineDto.getAiTaskTemplateId() == null) {
+            throw new AppLevelValidationException(translationService.t("fileProcessingPipeline.aiTaskShouldBeSelected"));
+        }
+
         FileProcessingPipeline entity = mapToEntity(pipelineDto);
         entity.setTask(aiTaskTemplateRepository.findByIdAndOwnerAndWorkspaceIsNull(pipelineDto.getAiTaskTemplateId(), currentUser));
         entity.setOwner(currentUser);
