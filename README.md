@@ -26,6 +26,12 @@
 
 ---
 
+## Demo of Bilgecan Usage
+
+[![Demo of Bilgecan usage](https://img.youtube.com/vi/n3wb7089NeE/0.jpg)](https://www.youtube.com/watch?v=n3wb7089NeE)
+
+---
+
 ## Architecture Overview
 
 Bilgecan is built using:
