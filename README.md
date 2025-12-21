@@ -252,6 +252,70 @@ Then run bilgecan:
 Now check https://localhost:8087 (change port with your configured value)
 
 ---
+
+### 6. Dockerizing Bilgecan
+
+After building the project you will have a jar file under target/ directory. You can use Dockerfile in the root of this repo to build docker image.
+
+```bash
+     docker build -t bilgecan:locallatest .
+```
+You can change `locallatest` with valid current version name.
+
+#### Docker run command
+
+Here is example docker run command. You need to **edit it and change values according to your machine installation**.
+
+```bash
+docker run --rm \
+    --name bilgecan \
+    -p 8087:8087 \
+    -e SPRING_PROFILES_ACTIVE=prod \
+    -e SPRING_DATASOURCE_URL="jdbc:postgresql://host.docker.internal:5433/bilgecandb?currentSchema=public" \
+    -e SPRING_DATASOURCE_USERNAME=myuser \
+    -e SPRING_DATASOURCE_PASSWORD=secret \
+    -e SERVER_PORT=8087 \
+    -e BILGECAN_ROOTINPUTFILEDIRECTORYPATH=/opt/bilgecan/rootDirs/input \
+    -e BILGECAN_ROOTOUTPUTFILEDIRECTORYPATH=/opt/bilgecan/rootDirs/output \
+    -e BILGECAN_ROOTARCHIVEFILEDIRECTORYPATH=/opt/bilgecan/rootDirs/archive \
+    -e BILGECAN_ROOTUPLOADFILEDIRECTORYPATH=/opt/bilgecan/rootDirs/upload \
+    -e SPRING_AI_OLLAMA_BASEURL=http://host.docker.internal:11434 \
+    -e SPRING_AI_OLLAMA_CHAT_MODEL=llama3.1:8b \
+    -e SPRING_AI_VECTORSTORE_PGVECTOR_INITIALIZESCHEMA=true \
+    -e SPRING_AI_VECTORSTORE_PGVECTOR_SCHEMANAME=public \
+    -e SPRING_AI_VECTORSTORE_PGVECTOR_TABLENAME=vector_store \
+    -e LOGGING_FILE_NAME=/opt/bilgecan/log/bilgecan-prod.log \
+    -e LOGGING_LEVEL_ROOT=ERROR \
+    -e LOGGING_LEVEL_NET_BILGECAN=ERROR \
+    -e LOGGING_LOGBACK_ROLLINGPOLICY_FILENAMEPATTERN=/opt/bilgecan/log/bilgecan-prod.%d{yyyy-MM-dd}.%i.gz \
+    -e LOGGING_LOGBACK_ROLLINGPOLICY_MAXFILESIZE=20MB \
+    -e LOGGING_LOGBACK_ROLLINGPOLICY_MAXHISTORY=30 \
+    -e LOGGING_LOGBACK_ROLLINGPOLICY_TOTALSIZECAP=1GB \
+    -e SERVER_SSL_ENABLED=true \
+    -e SERVER_SSL_KEYSTORE=/opt/bilgecan/config/ssl/bilgecan-keystore.p12 \
+    -e SERVER_SSL_KEYSTOREPASSWORD=changeit \
+    -e SERVER_SSL_KEYSTORETYPE=PKCS12 \
+    -e SERVER_SSL_KEYALIAS=bilgecan \
+    -v "/absolute/path/to/config/ssl:/opt/bilgecan/config/ssl:ro" \
+    -v "/absolute/path/to/bilgecan/log:/opt/bilgecan/log" \
+    -v "/path/to/root/input/directory:/opt/bilgecan/rootDirs/input" \
+    -v "/path/to/root/output/directory:/opt/bilgecan/rootDirs/output" \
+    -v "/path/to/root/archive/directory:/opt/bilgecan/rootDirs/archive" \
+    -v "/path/to/root/upload/directory:/opt/bilgecan/rootDirs/upload" \
+    --add-host=host.docker.internal:host-gateway \
+    bilgecan:locallatest
+```
+
+#### Using docker-compose
+
+You can use this example [docker-compose-example-with-bilgecan.yaml](assets/docker-compose-example-with-bilgecan.yaml)  file, **edit values and paths according to your machine installation** and start PostgreSQL with pgvector and bilgecan docker container at the same time. 
+
+```bash
+    docker-compose up -d
+```
+
+
+---
 ## Feature Documentations
 1. [Chat](/assets/docs/chat.md)
 2. [Prompts](/assets/docs/prompts.md)

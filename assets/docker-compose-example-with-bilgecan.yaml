@@ -1,0 +1,66 @@
+services:
+  db:
+    container_name: c_postgre_bilgecan-prod
+    image: 'pgvector/pgvector:pg17-trixie'
+    environment:
+      - 'POSTGRES_DB=bilgecandb'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '5432:5432'
+    volumes:
+      - /path/to/valid/bilgecan_postgre:/var/lib/postgresql/data
+
+  bilgecan:
+    image: bilgecan:locallatest
+    container_name: bilgecan
+    ports:
+      - "8087:8087"
+    depends_on:
+      - db
+    environment:
+      SPRING_PROFILES_ACTIVE: "prod"
+
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://db:5432/bilgecandb?currentSchema=public"
+      SPRING_DATASOURCE_USERNAME: "myuser"
+      SPRING_DATASOURCE_PASSWORD: "secret"
+
+      SERVER_PORT: "8087"
+
+      BILGECAN_ROOTINPUTFILEDIRECTORYPATH: "/opt/bilgecan/rootDirs/input"
+      BILGECAN_ROOTOUTPUTFILEDIRECTORYPATH: "/opt/bilgecan/rootDirs/output"
+      BILGECAN_ROOTARCHIVEFILEDIRECTORYPATH: "/opt/bilgecan/rootDirs/archive"
+      BILGECAN_ROOTUPLOADFILEDIRECTORYPATH: "/opt/bilgecan/rootDirs/upload"
+
+      SPRING_AI_OLLAMA_BASEURL: "http://host.docker.internal:11434"
+      SPRING_AI_OLLAMA_CHAT_MODEL: "llama3.1:8b"
+
+      SPRING_AI_VECTORSTORE_PGVECTOR_INITIALIZESCHEMA: "true"
+      SPRING_AI_VECTORSTORE_PGVECTOR_SCHEMANAME: "public"
+      SPRING_AI_VECTORSTORE_PGVECTOR_TABLENAME: "vector_store"
+
+      LOGGING_FILE_NAME: "/opt/bilgecan/log/bilgecan-prod.log"
+      LOGGING_LEVEL_ROOT: "ERROR"
+      LOGGING_LEVEL_NET_BILGECAN: "ERROR"
+
+      LOGGING_LOGBACK_ROLLINGPOLICY_FILENAMEPATTERN: "/opt/bilgecan/log/bilgecan-prod.%d{yyyy-MM-dd}.%i.gz"
+      LOGGING_LOGBACK_ROLLINGPOLICY_MAXFILESIZE: "20MB"
+      LOGGING_LOGBACK_ROLLINGPOLICY_MAXHISTORY: "30"
+      LOGGING_LOGBACK_ROLLINGPOLICY_TOTALSIZECAP: "1GB"
+
+      SERVER_SSL_ENABLED: "true"
+      SERVER_SSL_KEYSTORE: "/opt/bilgecan/config/ssl/bilgecan-keystore.p12"
+      SERVER_SSL_KEYSTOREPASSWORD: "changeit"
+      SERVER_SSL_KEYSTORETYPE: "PKCS12"
+      SERVER_SSL_KEYALIAS: "bilgecan"
+
+    volumes:
+      - /absolute/path/to/config/ssl:/opt/bilgecan/config/ssl:ro
+      - /absolute/path/to/bilgecan/log:/opt/bilgecan/log
+      - /path/to/root/input/directory:/opt/bilgecan/rootDirs/input
+      - /path/to/root/output/directory:/opt/bilgecan/rootDirs/output
+      - /path/to/root/archive/directory:/opt/bilgecan/rootDirs/archive
+      - /path/to/root/upload/directory:/opt/bilgecan/rootDirs/upload
+
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
