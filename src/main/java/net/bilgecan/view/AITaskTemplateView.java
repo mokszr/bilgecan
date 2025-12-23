@@ -88,8 +88,6 @@ public class AITaskTemplateView extends VerticalLayout implements HasDynamicTitl
 
         add(searchBarView);
 
-        hideForm();
-
         Grid<AITaskDto> grid = createGrid();
 
         add(grid);
@@ -107,6 +105,7 @@ public class AITaskTemplateView extends VerticalLayout implements HasDynamicTitl
         paginationView.setCurrentPageKey("currentPageAITaskTemplate");
         add(paginationView);
         paginationView.loadPage(paginationView.getCurrentPageInSession());
+        hideForm();
     }
 
     private void createForm() {
@@ -235,11 +234,15 @@ public class AITaskTemplateView extends VerticalLayout implements HasDynamicTitl
 
         formLayout.setVisible(true);
         searchBarView.setVisible(false);
+        aiTaskGrid.setVisible(false);
+        paginationView.setVisible(false);
     }
 
     private void hideForm() {
         formLayout.setVisible(false);
         searchBarView.setVisible(true);
+        aiTaskGrid.setVisible(true);
+        paginationView.setVisible(true);
     }
 
     private Grid<AITaskDto> createGrid() {
